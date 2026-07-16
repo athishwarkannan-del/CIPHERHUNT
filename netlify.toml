@@ -1,0 +1,14 @@
+[build]
+  base = "frontend"
+  publish = "dist"
+  command = "npm run build"
+
+[build.environment]
+  VITE_API_URL = "https://cipherhunt-1.onrender.com/api"
+  VITE_SUPABASE_URL = "https://bprukufjuuxtwqxtfpnr.supabase.co/rest/v1/"
+  VITE_SUPABASE_ANON_KEY = "sb_publishable_xXBKxULGN9cOuxx8jyeHaw__oevdF9v"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
