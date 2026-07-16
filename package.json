@@ -1,0 +1,15 @@
+{
+  "name": "cipherunit-root",
+  "version": "1.0.0",
+  "description": "Website Defacement Detection & Vulnerability Assessment Platform MVP",
+  "scripts": {
+    "install-all": "npm install && npm install --prefix backend && npm install --prefix frontend",
+    "backend": "npm start --prefix backend",
+    "backend:dev": "npm run dev --prefix backend",
+    "frontend": "npm run dev --prefix frontend",
+    "dev": "concurrently --kill-others \"npm run backend:dev\" \"npm run frontend\""
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
