@@ -6,7 +6,6 @@ import Layout from './components/Layout';
 
 // Pages
 import Login from './pages/Login';
-import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Websites from './pages/Websites';
 import ScanReport from './pages/ScanReport';
@@ -20,7 +19,6 @@ function App() {
         <Routes>
           {/* Public Routes */}
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
 
           {/* Secure Operator Routes */}
           <Route

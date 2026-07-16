@@ -123,14 +123,6 @@ const Login = () => {
               )}
             </button>
           </form>
-
-          {/* Register Link */}
-          <div className="mt-8 text-center text-sm">
-            <span className="text-cyber-muted">New Operator? </span>
-            <Link to="/register" className="text-cyber-primary hover:underline font-mono font-semibold">
-              Register Credentials
-            </Link>
-          </div>
         </div>
       </div>
     </div>
