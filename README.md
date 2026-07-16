@@ -56,3 +56,7 @@ A production-ready MVP for a 6-hour hackathon project. This platform allows secu
    - `VITE_API_URL=http://localhost:5000/api`
 3. Run `npm install` to install frontend dependencies.
 4. Start the developer server with `npm run dev`.
+
+ADMIN LOGIN TO ACCESS WEBSITE(MANDATORY):
+Mail:athishwarkannan@gmail.com
+password:athis2006
