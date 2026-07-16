@@ -4,9 +4,8 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const api = axios.create({
   baseURL: API_URL,
-  // A stalled backend request should become a recoverable UI error, not leave
-  // protected pages waiting indefinitely.
-  timeout: 10000,
+  // Increased timeout to 60 seconds to allow backend threat scans and AI evaluation to complete
+  timeout: 60000,
   headers: {
     'Content-Type': 'application/json'
   }
