@@ -343,17 +343,23 @@ const runScan = async (req, res) => {
 
         const reportUrl = `${req.headers.origin || 'http://localhost:3000'}/scans/${scan.id}`;
 
-        await sendAlertEmail({
+        // Send in the background asynchronously to prevent blocking the HTTP response
+        sendAlertEmail({
           website: website.name,
           ownerEmail: req.user.email,
           score: finalRiskScore,
           riskLevel: severity,
           vulnerabilities,
           reportUrl
+        })
+        .then(() => {
+          console.log(`[EMAIL] Auto-sent high risk alert email for ${website.name} to ${req.user.email}`);
+        })
+        .catch((emailErr) => {
+          console.error('[EMAIL] Failed to auto-send alert email:', emailErr.message);
         });
-        console.log(`[EMAIL] Auto-sent high risk alert email for ${website.name} to ${req.user.email}`);
       } catch (emailErr) {
-        console.error('[EMAIL] Failed to auto-send alert email:', emailErr.message);
+        console.error('[EMAIL] Failed to compile auto-send alert email data:', emailErr.message);
       }
     }
 
