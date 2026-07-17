@@ -22,7 +22,7 @@ const websiteRules = [
     .notEmpty().withMessage('Website URL is required')
     .isURL({
       protocols: ['http', 'https'],
-      require_tld: true,
+      require_tld: false, // Set to false to allow local testing nodes (localhost / 127.0.0.1)
       require_protocol: false
     }).withMessage('Must be a valid website URL')
 ];
