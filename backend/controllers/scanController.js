@@ -5,6 +5,7 @@ const { analyzeHeaders } = require('../utils/securityScanner');
 const { detectDefacement } = require('../utils/defacementDetector');
 const { analyzeWithGemini } = require('../utils/geminiAnalyzer');
 const { validateUrlForSSRF } = require('../utils/ssrfProtector');
+const { sendAlertEmail } = require('../services/emailService');
 
 // @desc    Get scan history for a website
 // @route   GET /api/scans/website/:websiteId
@@ -327,6 +328,34 @@ const runScan = async (req, res) => {
       details: `Completed security scan on: ${website.name}. Status: ${statusCode}. Risk Score: ${finalRiskScore}.`,
       ip_address: req.ip
     });
+
+    // 10. Automated Email Alert Notification
+    if (finalRiskScore >= 80) {
+      try {
+        const vulnerabilities = [];
+        if (defacementCheck.title_changed) vulnerabilities.push('Website title changed (Potential defacement)');
+        if (defacementCheck.suspicious_text_detected) vulnerabilities.push('Suspicious keywords injected');
+        if (!securityHeaderCheck.https) vulnerabilities.push('HTTPS not enforced');
+        if (!securityHeaderCheck.csp) vulnerabilities.push('Content-Security-Policy missing');
+        if (!securityHeaderCheck.hsts) vulnerabilities.push('HSTS missing');
+        if (!securityHeaderCheck.xFrameOptions) vulnerabilities.push('X-Frame-Options missing (Clickjacking risk)');
+        if (!securityHeaderCheck.xContentTypeOptions) vulnerabilities.push('X-Content-Type-Options missing');
+
+        const reportUrl = `${req.headers.origin || 'http://localhost:3000'}/scans/${scan.id}`;
+
+        await sendAlertEmail({
+          website: website.name,
+          ownerEmail: req.user.email,
+          score: finalRiskScore,
+          riskLevel: severity,
+          vulnerabilities,
+          reportUrl
+        });
+        console.log(`[EMAIL] Auto-sent high risk alert email for ${website.name} to ${req.user.email}`);
+      } catch (emailErr) {
+        console.error('[EMAIL] Failed to auto-send alert email:', emailErr.message);
+      }
+    }
 
     res.status(200).json({
       success: true,
