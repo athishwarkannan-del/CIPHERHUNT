@@ -20,12 +20,17 @@ const sendAlertEmail = async ({ website, ownerEmail, score, riskLevel, vulnerabi
     throw new Error('SMTP Config Error: EMAIL_USER or EMAIL_PASS environment variables are missing.');
   }
 
-  // Create transporter configuration (Gmail SMTP)
+  // Create transporter configuration (Gmail SMTP using Port 587 to bypass Render blocks)
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false, // false for port 587
     auth: {
       user: emailUser,
       pass: emailPass
+    },
+    tls: {
+      rejectUnauthorized: false // Helps avoid SSL handshake issues on cloud containers
     }
   });
 
