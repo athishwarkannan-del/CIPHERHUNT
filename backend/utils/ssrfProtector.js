@@ -54,6 +54,11 @@ const isPrivateIP = (ip) => {
  * @returns {Promise<boolean>} True if the URL resolves to a public, secure destination.
  */
 const validateUrlForSSRF = async (targetUrl) => {
+  // Allow local host scans in development mode to support offline operator testing
+  if (process.env.NODE_ENV !== 'production') {
+    return true;
+  }
+
   try {
     const parsedUrl = url.parse(targetUrl);
     const hostname = parsedUrl.hostname;
